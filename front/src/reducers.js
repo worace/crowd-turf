@@ -1,6 +1,8 @@
 import Imm from 'immutable';
 import Utils from './utils';
 
+function inc(i) { return i + 1; }
+
 function featuresAdded(state, action) {
   const geometries = action.payload.map(feature => feature.geometry.coordinates);
   return state.updateIn(['currentTurf', 'geometry', 'coordinates'],
@@ -22,8 +24,16 @@ function saveTurf(state) {
   const draw = state.get('drawControl');
   draw.deleteAll();
   draw.changeMode(draw.modes.DRAW_POLYGON);
-  return state.set('currentTurf', Utils.feature())
-    .updateIn(['turfSet', 'features'], list => list.push(state.get('currentTurf')));
+
+  const newTurf = state
+        .get('currentTurf')
+        .setIn(['properties', 'label'],
+               state.get('nextTurfNumber'));
+
+  return state
+    .update('nextTurfNumber', inc)
+    .set('currentTurf', Utils.feature())
+    .updateIn(['turfSet', 'features'], list => list.push(newTurf));
 }
 
 const ActionHandlers = {
