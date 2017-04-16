@@ -1,18 +1,6 @@
 import Imm from 'immutable';
 import Utils from './utils';
 
-window.Imm = Imm;
-
-// GeoJSON Features
-// 1 coord -- point
-// 2 or 3 coords -- linestring
-// 4 + coords -- polygon
-
-function updateFeature(previous, coords) {
-  const keypath = ['geometry', 'coordinates'];
-  return previous.updateIn(keypath, list => list.push(coords));
-}
-
 function featuresAdded(state, action) {
   const geometries = action.payload.map(feature => feature.geometry.coordinates);
   return state.updateIn(['currentTurf', 'geometry', 'coordinates'],
