@@ -1,9 +1,8 @@
 import React from 'react';
-import Map from './components/Map';
 
 const App = () => (
   <div className="App">
-    <Map />
+    <h1>App</h1>
   </div>
 );
 

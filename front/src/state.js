@@ -7,10 +7,19 @@ function featureCollection() {
   });
 }
 
+function feature() {
+  return Imm.fromJS({
+    'type': 'Feature',
+    'properties': {},
+    'geometry': {
+      'type': 'LineString',
+      'coordinates': []
+    }
+  });
+}
+
 const initialState = Imm.Map({
-  center: Imm.Map({latitude: 34.0522, longitude: -118.2437}),
-  currentFeatureSet: featureCollection(),
-  currentFeature: null
+  currentFeatureSet: featureCollection()
 });
 
 export default initialState;

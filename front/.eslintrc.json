@@ -7,6 +7,8 @@
     "window": false
   },
   "rules": {
+    "array-bracket-spacing": 0,
+    "no-else-return": 0,
     "arrow-body-style": 0,
     "object-curly-spacing": 0,
     "comma-dangle": 0,
