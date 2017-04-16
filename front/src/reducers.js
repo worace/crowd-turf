@@ -1,5 +1,6 @@
 import Imm from 'immutable';
 import Utils from './utils';
+
 window.Imm = Imm;
 
 // GeoJSON Features
@@ -10,26 +11,38 @@ window.Imm = Imm;
 function updateFeature(previous, coords) {
   const keypath = ['geometry', 'coordinates'];
   return previous.updateIn(keypath, list => list.push(coords));
-  // First and last point need to be the same for a "LinearRing"
-  // if (coords.size === 0) {
-  //   // return previous.setIn(keypath, Imm.List([coords, coords]));
-  // } else {
-  //   return previous.updateIn(keypath,
-  //                            list => {
-  //                              return list.take(list.size - 1)
-  //                                .push(coords)
-  //                                .push(list.first());
-  //                            });
-  // }
 }
 
-function pointAdded(state, action) {
-  const coords = Imm.List(action.payload);
-  return state.update('currentFeature', prev => updateFeature(prev, coords));
+function featuresAdded(state, action) {
+  const geometries = action.payload.map(feature => feature.geometry.coordinates);
+  return state.updateIn(['currentTurf', 'geometry', 'coordinates'],
+                        list => list.concat(Imm.List(geometries)));
+}
+
+function mapLoaded(state, action) {
+  return state.set('map', action.payload.map)
+    .set('drawControl', action.payload.drawControl);
+}
+
+function polygonMode(state) {
+  const draw = state.get('drawControl');
+  draw.changeMode(draw.modes.DRAW_POLYGON);
+  return state;
+}
+
+function saveTurf(state) {
+  const draw = state.get('drawControl');
+  draw.deleteAll();
+  draw.changeMode(draw.modes.DRAW_POLYGON);
+  return state.set('currentTurf', Utils.feature())
+    .updateIn(['turfSet', 'features'], list => list.push(state.get('currentTurf')));
 }
 
 const ActionHandlers = {
-  POINT_ADDED: pointAdded,
+  MAP_LOADED: mapLoaded,
+  POLYGON_MODE: polygonMode,
+  FEATURES_ADDED: featuresAdded,
+  SAVE_TURF: saveTurf,
   MAP_MOVED: (state, action) => state.set('center', Imm.List(action.payload))
 };
 

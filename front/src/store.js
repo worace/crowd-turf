@@ -5,7 +5,7 @@ import initialState from './state';
 import reducers from './reducers';
 
 const logger = createLogger({
-  stateTransformer: (state) => pp(state)
+  stateTransformer: (state) => state.toJS()
 });
 
 export default createStore(reducers,
