@@ -10,7 +10,11 @@ function item(feature, dispatch) {
       onMouseEnter={_.partial(dispatch.hoverStart, feature)}
       onMouseLeave={dispatch.hoverEnd}
       key={fprops.id} >
-      <p>Turf #{fprops.label}</p>
+      <a
+        href={`/turf/${fprops.id}`}
+        onClick={_.partial(dispatch.click, feature)} >
+        <p>Turf #{fprops.label}</p>
+      </a>
     </li>
   );
 }
@@ -38,7 +42,11 @@ function dispatchToProps(dispatch) {
   return {
     dispatch: {
       hoverStart: (feature) => dispatch({type: 'HOVER_START', payload: feature}),
-      hoverEnd: () => dispatch({type: 'HOVER_END'})
+      hoverEnd: () => dispatch({type: 'HOVER_END'}),
+      click: (feature, event) => {
+        event.preventDefault();
+        dispatch({type: 'EDIT_FEATURE', payload: feature});
+      }
     }
   };
 }

@@ -1,4 +1,6 @@
 import Imm from 'immutable';
+import _ from 'lodash';
+import pp from 'pretty-immutable';
 import Utils from './utils';
 
 function inc(i) { return i + 1; }
@@ -21,14 +23,22 @@ function polygonMode(state) {
 }
 
 function saveTurf(state) {
+  console.log('*** Save Turf ***');
   const draw = state.get('drawControl');
+  console.log('CURRENT:');
+  console.log(pp(state.get('currentTurf')));
   draw.deleteAll();
-  draw.changeMode(draw.modes.DRAW_POLYGON);
+
+  console.log('CURRENT:');
+  console.log(pp(state.get('currentTurf')));
 
   const newTurf = state
         .get('currentTurf')
         .setIn(['properties', 'label'],
                state.get('nextTurfNumber'));
+
+  console.log('NEW:');
+  console.log(pp(newTurf));
 
   return state
     .update('nextTurfNumber', inc)
@@ -36,10 +46,39 @@ function saveTurf(state) {
     .updateIn(['turfSet', 'features'], list => list.push(newTurf));
 }
 
+function excludeFeature(feature, list) {
+  const id = feature.getIn(['properties', 'id']);
+  return list.filterNot(f => f.getIn(['properties', 'id']) === id);
+}
+
+function featureSelected(state, action) {
+  const feature = action.payload;
+  const draw = state.get('drawControl');
+  const featureColl = Utils
+        .featureCollection()
+        .update('features', l => l.push(feature));
+
+  const featureId = draw.set(featureColl.toJS());
+  draw.changeMode(draw.modes.DIRECT_SELECT, {featureId});
+
+  return state
+    .set('currentTurf', feature)
+    .updateIn(['turfSet', 'features'],
+              _.partial(excludeFeature, feature));
+}
+
+function featuresUpdated(state, action) {
+  const coords = Imm.fromJS(action.payload[0].geometry.coordinates);
+  return state.setIn(['currentTurf', 'geometry', 'coordinates', '0'],
+                     coords);
+}
+
 const ActionHandlers = {
   MAP_LOADED: mapLoaded,
   POLYGON_MODE: polygonMode,
   FEATURES_ADDED: featuresAdded,
+  FEATURES_UPDATED: featuresUpdated,
+  FEATURE_SELECTED: featureSelected,
   HOVER_START: (state, action) => state.set('hoverFeature', action.payload),
   HOVER_END: (state) => state.set('hoverFeature', Utils.feature()),
   SAVE_TURF: saveTurf,

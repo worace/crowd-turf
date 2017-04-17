@@ -14,14 +14,26 @@ function feature() {
   });
 }
 
+function featureCollection() {
+  return Imm.fromJS({
+    'type': 'FeatureCollection',
+    'features': []
+  });
+}
+
+function selectKeys(map, keys) {
+  const keySet = Imm.Set(keys);
+  return map.filter((v, k) => keySet.has(k));
+}
+
+function or(left, right) {
+  return left || right;
+}
+
 export default {
   coordinate: ({lng, lat}) => [lng, lat],
-  featureCollection: () => {
-    return Imm.fromJS({
-      'type': 'FeatureCollection',
-      'features': []
-    });
-  },
-  feature
+  featureCollection,
+  feature,
+  selectKeys
 };
 
