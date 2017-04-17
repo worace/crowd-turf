@@ -1,13 +1,12 @@
 import Imm from 'immutable';
-
-function multipolygon(...features) {
-  debugger;
-}
+import uuid from 'uuid/v4';
 
 function feature() {
   return Imm.fromJS({
     'type': 'Feature',
-    'properties': {},
+    'properties': {
+      id: uuid()
+    },
     'geometry': {
       'type': 'MultiPolygon',
       'coordinates': []
@@ -23,7 +22,6 @@ export default {
       'features': []
     });
   },
-  multipolygon,
   feature
 };
 

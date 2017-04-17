@@ -40,6 +40,8 @@ const ActionHandlers = {
   MAP_LOADED: mapLoaded,
   POLYGON_MODE: polygonMode,
   FEATURES_ADDED: featuresAdded,
+  HOVER_START: (state, action) => state.set('hoverFeature', action.payload),
+  HOVER_END: (state) => state.set('hoverFeature', Utils.feature()),
   SAVE_TURF: saveTurf,
   MAP_MOVED: (state, action) => state.set('center', Imm.List(action.payload))
 };

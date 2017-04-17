@@ -1,6 +1,5 @@
 import { applyMiddleware, createStore } from 'redux';
 import {createLogger} from 'redux-logger';
-import pp from 'pretty-immutable';
 import initialState from './state';
 import reducers from './reducers';
 
