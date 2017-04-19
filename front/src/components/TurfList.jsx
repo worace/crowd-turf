@@ -3,18 +3,21 @@ import {connect} from 'react-redux';
 import _ from 'lodash';
 import pp from 'pretty-immutable';
 
+      // onMouseEnter={_.partial(dispatch.hoverStart, feature)}
+      // onMouseLeave={dispatch.hoverEnd}
 function item(feature, dispatch) {
   const fprops = feature.get('properties').toJS();
   return (
     <li
-      onMouseEnter={_.partial(dispatch.hoverStart, feature)}
-      onMouseLeave={dispatch.hoverEnd}
       key={fprops.id} >
       <a
         href={`/turf/${fprops.id}`}
         onClick={_.partial(dispatch.click, feature)} >
         <p>Turf #{fprops.label}</p>
       </a>
+      <pre>
+        {pp(feature)}
+      </pre>
     </li>
   );
 }
@@ -45,7 +48,7 @@ function dispatchToProps(dispatch) {
       hoverEnd: () => dispatch({type: 'HOVER_END'}),
       click: (feature, event) => {
         event.preventDefault();
-        dispatch({type: 'EDIT_FEATURE', payload: feature});
+        dispatch({type: 'FEATURE_SELECTED', payload: feature});
       }
     }
   };

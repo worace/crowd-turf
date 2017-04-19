@@ -3,12 +3,17 @@ import _ from 'lodash';
 import pp from 'pretty-immutable';
 import Utils from './utils';
 
+window.pp = pp;
+window.Imm = Imm;
+
 function inc(i) { return i + 1; }
 
 function featuresAdded(state, action) {
   const geometries = action.payload.map(feature => feature.geometry.coordinates);
+  console.log("**** ADDED FEATURES: ****");
+  console.log(pp(Imm.fromJS(geometries)));
   return state.updateIn(['currentTurf', 'geometry', 'coordinates'],
-                        list => list.concat(Imm.List(geometries)));
+                        list => list.concat(Imm.fromJS(geometries)));
 }
 
 function mapLoaded(state, action) {
@@ -22,12 +27,16 @@ function polygonMode(state) {
   return state;
 }
 
+function excludeFeature(feature, list) {
+  const id = feature.getIn(['properties', 'id']);
+  return list.filterNot(f => f.getIn(['properties', 'id']) === id);
+}
+
 function saveTurf(state) {
   console.log('*** Save Turf ***');
   const draw = state.get('drawControl');
   console.log('CURRENT:');
   console.log(pp(state.get('currentTurf')));
-  draw.deleteAll();
 
   console.log('CURRENT:');
   console.log(pp(state.get('currentTurf')));
@@ -40,15 +49,15 @@ function saveTurf(state) {
   console.log('NEW:');
   console.log(pp(newTurf));
 
+  draw.deleteAll();
+
+  draw.changeMode(draw.modes.DRAW_POLYGON);
   return state
     .update('nextTurfNumber', inc)
     .set('currentTurf', Utils.feature())
+    .updateIn(['turfSet', 'features'],
+              _.partial(excludeFeature, newTurf))
     .updateIn(['turfSet', 'features'], list => list.push(newTurf));
-}
-
-function excludeFeature(feature, list) {
-  const id = feature.getIn(['properties', 'id']);
-  return list.filterNot(f => f.getIn(['properties', 'id']) === id);
 }
 
 function featureSelected(state, action) {
@@ -58,18 +67,22 @@ function featureSelected(state, action) {
         .featureCollection()
         .update('features', l => l.push(feature));
 
+  console.log('DRAW SET FEATURE:');
+  console.log(pp(featureColl));
   const featureId = draw.set(featureColl.toJS());
   draw.changeMode(draw.modes.DIRECT_SELECT, {featureId});
+  console.log(draw.getSelected());
+  console.log(pp(Imm.fromJS(draw.getSelected())));
 
   return state
-    .set('currentTurf', feature)
-    .updateIn(['turfSet', 'features'],
-              _.partial(excludeFeature, feature));
+    .set('currentTurf', feature);
 }
 
 function featuresUpdated(state, action) {
   const coords = Imm.fromJS(action.payload[0].geometry.coordinates);
-  return state.setIn(['currentTurf', 'geometry', 'coordinates', '0'],
+  console.log('***** FEATURES UPDATED *****');
+  console.log(pp(Imm.fromJS(action.payload)));
+  return state.setIn(['currentTurf', 'geometry', 'coordinates'],
                      coords);
 }
 

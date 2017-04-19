@@ -7,6 +7,8 @@ import Map from './components/Map';
 import Store from './store';
 import './css/index.css';
 
+window.Store = Store;
+
 Map.init(Store);
 
 ReactDOM.render(
