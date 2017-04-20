@@ -2,6 +2,7 @@ import Imm from 'immutable';
 import _ from 'lodash';
 import pp from 'pretty-immutable';
 import Utils from './utils';
+import Geojson from './geojson';
 
 window.pp = pp;
 window.Imm = Imm;
@@ -10,8 +11,6 @@ function inc(i) { return i + 1; }
 
 function featuresAdded(state, action) {
   const geometries = action.payload.map(feature => feature.geometry.coordinates);
-  console.log("**** ADDED FEATURES: ****");
-  console.log(pp(Imm.fromJS(geometries)));
   return state.updateIn(['currentTurf', 'geometry', 'coordinates'],
                         list => list.concat(Imm.fromJS(geometries)));
 }
@@ -38,8 +37,12 @@ function saveTurf(state) {
   console.log('CURRENT:');
   console.log(pp(state.get('currentTurf')));
 
-  console.log('CURRENT:');
-  console.log(pp(state.get('currentTurf')));
+  console.log('ALL IN DRAW');
+  console.log(pp(Imm.fromJS(draw.getAll())));
+
+  const props = state.getIn(['currentTurf', 'properties']);
+  console.log('MERGED');
+  console.log(pp(Geojson.mergeFeatureCollection(props, Imm.fromJS(draw.getAll()))));
 
   const newTurf = state
         .get('currentTurf')
