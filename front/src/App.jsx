@@ -1,10 +1,29 @@
 import React from 'react';
-import Map from './components/Map';
+import {connect} from 'react-redux';
+import TurfList from './components/TurfList';
 
-const App = () => (
+const App = (props) => (
   <div className="App">
-    <Map />
+    <h1>App</h1>
+    <button onClick={props.saveTurf}>Save Turf</button>
+    <button onClick={props.polygonMode}>Add Shape</button>
+    <TurfList />
   </div>
 );
 
-export default App;
+function stateToProps() {
+  return {};
+}
+
+function dispatchToProps(dispatch) {
+  return {
+    saveTurf: () => {
+      dispatch({type: 'SAVE_TURF'});
+    },
+    polygonMode: () => {
+      dispatch({type: 'POLYGON_MODE'});
+    }
+  };
+}
+
+export default connect(stateToProps, dispatchToProps)(App);
