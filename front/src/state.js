@@ -4,8 +4,8 @@ import Utils from './utils';
 const feature = Imm.fromJS({
   'type': 'Feature',
   'properties': {
-    'id': 'starter-feature',
-    label: 0
+    id: 'starter-feature',
+    index: 0
   },
   'geometry': {
     'type': 'MultiPolygon',
@@ -42,7 +42,7 @@ const initialState = Imm.Map({
   turfSet: Utils.featureCollection().update('features', l => l.push(feature)),
   currentTurf: Utils.feature(),
   hoverFeature: Utils.feature(),
-  nextTurfNumber: 1
+  nextIndex: 1
 });
 
 export default initialState;

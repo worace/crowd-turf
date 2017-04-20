@@ -13,7 +13,7 @@ function item(feature, dispatch) {
       <a
         href={`/turf/${fprops.id}`}
         onClick={_.partial(dispatch.click, feature)} >
-        <p>Turf #{fprops.label}</p>
+        <p>Turf #{fprops.index}</p>
       </a>
       <pre>
         {pp(feature)}
@@ -25,6 +25,7 @@ function item(feature, dispatch) {
 function items(featureCollection, dispatch) {
   return featureCollection
     .get('features')
+    .sortBy(t => t.getIn(['properties', 'index']))
     .map(f => item(f, dispatch))
     .toJS();
 }

@@ -48,11 +48,9 @@ function initSources(map, state) {
 
 function featureSelected(dispatch, {features}) {
   const feature = {};
-  console.log('SELECTED FEATURE');
   ['properties', 'type', 'geometry'].forEach(k => {
     feature[k] = features[0][k];
   });
-  console.log(pp(Imm.fromJS(feature)));
   // PROBLEM: Mapbox Seems to convert single-feature multipolygons to
   // polygons when adding them to a source
   // Then when we set them back to "current feature" and add
@@ -78,8 +76,6 @@ function featureSelected(dispatch, {features}) {
 }
 
 function initDispatch(map, store) {
-  map.on('draw.create', ({features}) => store.dispatch({type: 'FEATURES_ADDED', payload: features}));
-  map.on('draw.update', ({features}) => store.dispatch({type: 'FEATURES_UPDATED', payload: features}));
   map.on('click', 'turfSet', _.partial(featureSelected, store.dispatch));
 }
 
