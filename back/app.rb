@@ -25,6 +25,10 @@ class GroundGameApi < Sinatra::Base
     db.execute(:user_by_id, {id: params[:id]}).first.to_json
   end
 
+  get '/canvases' do
+    db.execute(:all_canvases).to_json
+  end
+
   get '/health' do
     content_type :json
     {status: "OK"}.to_json

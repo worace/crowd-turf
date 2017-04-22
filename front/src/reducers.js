@@ -59,11 +59,16 @@ function canvasAdded(state, action) {
   return state.update('canvases', l => l.push(action.payload));
 }
 
+function canvasesReceived(state, action) {
+  return state.set('canvases', action.payload);
+}
+
 const ActionHandlers = {
   MAP_LOADED: mapLoaded,
   POLYGON_MODE: polygonMode,
   FEATURE_SELECTED: featureSelected,
   CANVAS_ADDED: canvasAdded,
+  CANVASES_RECEIVED: canvasesReceived,
   HOVER_START: (state, action) => state.set('hoverFeature', action.payload),
   HOVER_END: (state) => state.set('hoverFeature', Utils.feature()),
   SAVE_TURF: saveTurf,

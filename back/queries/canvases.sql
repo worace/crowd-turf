@@ -6,3 +6,7 @@ FROM users
 SELECT *
 FROM users
 WHERE id = :id
+
+-- name: all_canvases
+SELECT *
+FROM canvases
