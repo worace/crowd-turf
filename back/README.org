@@ -1,0 +1,30 @@
+* GroundGame Backend
+
+** Schema
+*** Users
+ * email
+ * first name
+ * last name
+ * pw / salt / etc
+*** TurfSets? Outings? TurfGroups?
+ * Owned by a user
+*** Turf
+ * geog
+ * id
+ * properties... (JSON/HSTORE?)
+** Authentication
+*** JWT?
+ * store in cookie
+ * https://github.com/jwt/ruby-jwt
+** Feature Wishlist
+*** View individual turf (un-authed)
+*** Printing turf-set (PDF?)
+*** Invite users via email token
+*** House-Counting for turf
+
+** Frontend
+*** Pages
+ * TurfSets (index)
+ * TurfSet (show)
+ * Turf (show)
+ * root/login/etc
