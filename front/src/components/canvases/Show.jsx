@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import TurfList from './TurfList';
-import Store from '../store';
-import Map from './Map';
+import Store from '../../store';
+import Map from '../Map';
 
-class TurfSet extends Component {
+class CanvasShow extends Component {
   componentWillMount() {
     this.map = new Map(Store, 'map');
   }
@@ -44,4 +44,4 @@ function dispatchToProps(dispatch) {
   };
 }
 
-export default connect(stateToProps, dispatchToProps)(TurfSet);
+export default connect(stateToProps, dispatchToProps)(CanvasShow);

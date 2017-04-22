@@ -14,7 +14,7 @@ function list(canvases) {
   });
 }
 
-function TurfSetList(props) {
+function Index(props) {
   return (
     <div>
       <h1>TurfSetList</h1>
@@ -32,4 +32,4 @@ function stateToProps(state) {
   return {canvases: state.get('canvases')};
 }
 
-export default connect(stateToProps)(TurfSetList);
+export default connect(stateToProps)(Index);
