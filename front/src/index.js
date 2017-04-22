@@ -9,8 +9,6 @@ import NewCanvas from './components/canvases/New';
 import Store from './store';
 import './css/index.css';
 
-window.Store = Store;
-
 ReactDOM.render(
   // eslint-disable-next-line react/jsx-filename-extension
   <Provider store={Store}>
