@@ -38,7 +38,14 @@ const feature = Imm.fromJS({
   }
 });
 
+const canvases = Imm.fromJS([
+  {name: 'April 23 Simi Valley', id: 'set-1'},
+  {name: 'May 5 Santa Clarit', id: 'set-2'},
+  {name: 'Voter Reg', id: 'set-3'}
+]);
+
 const initialState = Imm.Map({
+  canvases,
   turfSet: Utils.featureCollection().update('features', l => l.push(feature)),
   currentTurf: Utils.feature(),
   hoverFeature: Utils.feature(),

@@ -8,5 +8,5 @@ const logger = createLogger({
 });
 
 export default createStore(reducers,
-                           initialState);
-                           // applyMiddleware(logger)
+                           initialState,
+                           applyMiddleware(logger));
