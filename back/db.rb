@@ -24,7 +24,7 @@ class DB
 
     body = query.sub(header, '')
 
-    arguments = query.scan(/ :(.+)/).flatten.map(&:to_sym)
+    arguments = query.scan(/ :(.+)?;/).flatten.map(&:to_sym)
     {name: query_name,
      body: insert_pg_variables(body, arguments),
      arguments: arguments}
@@ -49,6 +49,3 @@ class DB
     CONN.exec_params(q[:body], params).to_a
   end
 end
-d = DB.new
-d.load_queries("./queries/canvases.sql")
-d.execute(:user_by_id, {:id => "68b4f96d-654a-4e9e-bcae-50509395e52a"})
