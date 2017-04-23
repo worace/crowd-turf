@@ -4,10 +4,12 @@ import {Link} from 'react-router-dom';
 import TurfList from './TurfList';
 import Store from '../../store';
 import Map from '../Map';
+import Api from '../../api';
 
 class CanvasShow extends Component {
   componentWillMount() {
     this.map = new Map(Store, 'map');
+    this.props.loadTurf(this.props.match.params.id);
   }
 
   componentWillUnmount() {
@@ -35,6 +37,10 @@ function stateToProps() {
 
 function dispatchToProps(dispatch) {
   return {
+    loadTurf: (canvasId) => {
+      dispatch({type: 'TURF_REQUESTED'});
+      Api.getTurf(canvasId, dispatch);
+    },
     saveTurf: () => {
       dispatch({type: 'SAVE_TURF'});
     },

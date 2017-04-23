@@ -27,5 +27,10 @@ export default {
     return axios.get(url('/canvases'))
       .then(resp => Imm.fromJS(resp.data))
       .then(canvases => dispatch({type: 'CANVASES_RECEIVED', payload: canvases}));
+  },
+  getTurf: (canvasId, dispatch) => {
+    return axios.get(url(`/canvases/${canvasId}/turf`))
+      .then(resp => Imm.fromJS(resp.data))
+      .then(turf => dispatch({type: 'TURF_RECEIVED', payload: turf}));
   }
 };

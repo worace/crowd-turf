@@ -29,6 +29,22 @@ class GroundGameApi < Sinatra::Base
     db.execute(:all_canvases).to_json
   end
 
+  get '/canvases/:id/turf' do
+    turf = db.execute(:turf_for_canvas, {canvas_id: params[:id]})
+    features = turf.map do |t|
+      {type: "Feature",
+       properties: t,
+       geometry: {
+         type: "Polygon",
+         coordinates: []
+       }}
+    end
+
+    collection = {type: "FeatureCollection",
+                  features: features}
+    collection.to_json
+  end
+
   get '/health' do
     content_type :json
     {status: "OK"}.to_json

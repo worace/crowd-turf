@@ -1,5 +1,6 @@
 import Imm from 'immutable';
 import Utils from './utils';
+import uuid from 'uuid/v4';
 
 const feature = Imm.fromJS({
   'type': 'Feature',
@@ -39,9 +40,9 @@ const feature = Imm.fromJS({
 });
 
 const canvases = Imm.fromJS([
-  {name: 'April 23 Simi Valley', id: 'set-1'},
-  {name: 'May 5 Santa Clarit', id: 'set-2'},
-  {name: 'Voter Reg', id: 'set-3'}
+  {name: 'April 23 Simi Valley', id: uuid()},
+  {name: 'May 5 Santa Clarit', id: uuid()},
+  {name: 'Voter Reg', id: uuid()}
 ]);
 
 const initialState = Imm.Map({
